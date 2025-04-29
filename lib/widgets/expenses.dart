@@ -1,5 +1,5 @@
 import 'package:expense_tracker/widgets/expenses_list/expenses_list.dart';
-import 'package:expense_tracker/widgets/expenses_list/new_expense.dart';
+import 'package:expense_tracker/widgets/new_expense.dart';
 import 'package:flutter/material.dart';
 
 import '../models/expense.dart';
@@ -18,14 +18,24 @@ class _ExpensesState extends State<Expenses> {
     showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (ctx) => NewExpense(onAddExpense: _addExpense,),
+      builder: (ctx) => NewExpense(
+        onAddExpense: _addExpense,
+      ),
     );
   }
-void _addExpense(Expense expense) {
+
+  void _addExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
     });
   }
+
+  void _removeExpense(Expense expense) {
+    setState(() {
+      _registeredExpenses.remove(expense);
+    });
+  }
+
   final List<Expense> _registeredExpenses = [
     Expense(
         title: 'Cheeseburger',
@@ -54,7 +64,10 @@ void _addExpense(Expense expense) {
         children: [
           Text("Chart"),
           Expanded(
-            child: ExpensesList(expenses: _registeredExpenses),
+            child: ExpensesList(
+              onRemoveExpense: _removeExpense,
+              expenses: _registeredExpenses,
+            ),
           ),
         ],
       ),
